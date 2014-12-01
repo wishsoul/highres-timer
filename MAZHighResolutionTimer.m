@@ -96,7 +96,6 @@ static uint64_t nanos_to_abs(uint64_t nanos)
     uint64_t time_to_wait = nanos_to_abs(self.interval * NANOS_PER_MILLISEC);
     uint64_t i = 1;
     uint64_t next_fire_date = self.abs_start_date + (time_to_wait * i);
-    mach_wait_until(next_fire_date);
     
     while (self.running)
     {
