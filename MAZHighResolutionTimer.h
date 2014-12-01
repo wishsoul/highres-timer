@@ -16,9 +16,10 @@
 @end
 @interface MAZHighResolutionTimer : NSObject
 @property (nonatomic) uint64_t interval;
+@property (nonatomic) BOOL running;
 @property (strong, nonatomic) id <MAZHighResolutionTimerDelegate> delegate;
-- (instancetype)initWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate NS_DESIGNATED_INITIALIZER;
-+ (instancetype)startWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate;
+- (instancetype)initWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate error:(NSError **)error NS_DESIGNATED_INITIALIZER;
++ (instancetype)startWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate error:(NSError **)error;
 - (void)start;
 - (void)stop;
 

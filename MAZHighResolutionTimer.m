@@ -34,42 +34,41 @@ static uint64_t nanos_to_abs(uint64_t nanos)
     return nanos * timebase_info.denom / timebase_info.numer;
 }
 
-void example_mach_wait_until()
-{
-    mach_timebase_info(&timebase_info);
-    uint64_t time_to_wait = nanos_to_abs(10ULL * NANOS_PER_SEC);
-    uint64_t now = mach_absolute_time();
-    mach_wait_until(now + time_to_wait);
-}
-
 @interface MAZHighResolutionTimer()
-@property (nonatomic) BOOL running;
 @property (nonatomic) uint64_t abs_start_date;
 - (void)run;
 @end
 
 @implementation MAZHighResolutionTimer
-{
-    uint64_t _now;
-}
 
-- (instancetype)initWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate
+- (instancetype)initWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate error:(NSError **)error
 {
     if (self = [super init])
     {
-        if (milliseconds < 10)
+        if (milliseconds <= 0)
         {
-            milliseconds = 10;
+            *error = [NSError errorWithDomain:@"me.maz.highres-timer.nonzero.error" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Interval must be greater than zero"}];
+            return nil;
+        }
+        
+        uint64_t time_to_wait = nanos_to_abs(milliseconds * NANOS_PER_MILLISEC);
+        uint64_t first_fire_date = mach_absolute_time() + (time_to_wait);
+        
+        if (first_fire_date < mach_absolute_time())
+        {
+            *error = [NSError errorWithDomain:@"me.maz.highres-timer.overflow.error" code:-1 userInfo:@{NSLocalizedDescriptionKey: @"Integer overflow"}];
+            return nil;
         }
         self.delegate = delegate;
         self.interval = milliseconds;
+        self.running = NO;
     }
     return self;
 }
 
-+ (instancetype)startWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate
++ (instancetype)startWithInterval:(uint64_t)milliseconds delegate:(id<MAZHighResolutionTimerDelegate>)delegate error:(NSError **)error
 {
-    MAZHighResolutionTimer *timer = [[MAZHighResolutionTimer alloc] initWithInterval:milliseconds delegate:delegate];
+    MAZHighResolutionTimer *timer = [[MAZHighResolutionTimer alloc] initWithInterval:milliseconds delegate:delegate error:error];
     [timer start];
     return timer;
 }
@@ -80,7 +79,6 @@ void example_mach_wait_until()
     {
         [NSThread detachNewThreadSelector:@selector(run) toTarget:self withObject:nil];
     }
-
 }
 
 - (void)stop
