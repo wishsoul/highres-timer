@@ -10,6 +10,7 @@
 
 @interface ViewController ()
 @property (strong, nonatomic) IBOutlet UILabel *label;
+- (IBAction)toggleTimer:(id)sender;
 
 @end
 
@@ -18,9 +19,13 @@
     MAZHighResolutionTimer *_timer;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    _timer = [MAZHighResolutionTimer startWithInterval:[self secondsToMilliseconds:1.0] delegate:self];
+    NSError *err;
+    _timer = [[MAZHighResolutionTimer alloc] initWithInterval:[self secondsToMilliseconds:1] delegate:self error:&err];
+    NSLog(@"err: %@", err);
+    
     self.label.text = @"fire";
 }
 
@@ -31,7 +36,7 @@
 
 - (void)highResolutionTimerDidFire
 {
-    NSLog(@"it fired");
+    NSLog(@"highResolutionTimerDidFire");
     dispatch_async(dispatch_get_main_queue(), ^{
         self.label.backgroundColor = (self.label.backgroundColor == [UIColor whiteColor]) ? [UIColor blackColor] : [UIColor whiteColor];
         self.label.textColor = (self.label.textColor == [UIColor blackColor]) ? [UIColor whiteColor] : [UIColor blackColor];
@@ -41,6 +46,20 @@
 - (uint64_t)secondsToMilliseconds:(NSTimeInterval)timeInterval
 {
     return (timeInterval * 1000);
+}
+
+- (IBAction)toggleTimer:(id)sender
+{
+    UIButton *button = (UIButton*)sender;
+    [button setTitle:([button.titleLabel.text isEqualToString:@"Start"]) ? @"Stop" : @"Start" forState:UIControlStateNormal];
+    if (!_timer.running)
+    {
+        [_timer start];
+    }
+    else
+    {
+        [_timer stop];
+    }
 }
 
 @end

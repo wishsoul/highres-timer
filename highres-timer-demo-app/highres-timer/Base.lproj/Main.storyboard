@@ -26,12 +26,29 @@
                                 <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0Z9-2E-Omx">
+                                <rect key="frame" x="213" y="521" width="175" height="59"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="59" id="3Cn-uz-KkL"/>
+                                    <constraint firstAttribute="height" constant="59" id="66n-3A-jW1"/>
+                                    <constraint firstAttribute="width" constant="175" id="oRh-Ss-xll"/>
+                                </constraints>
+                                <state key="normal" title="Start">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="toggleTimer:" destination="BYZ-38-t0r" eventType="touchUpInside" id="qiO-tN-8oj"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="centerX" secondItem="0Z9-2E-Omx" secondAttribute="centerX" id="HWr-KR-iNl"/>
                             <constraint firstAttribute="centerY" secondItem="rSq-Ff-FIi" secondAttribute="centerY" id="bgU-xa-2xJ"/>
+                            <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="0Z9-2E-Omx" secondAttribute="bottom" constant="20" id="hJQ-pE-Zd0"/>
                             <constraint firstAttribute="centerX" secondItem="rSq-Ff-FIi" secondAttribute="centerX" id="iXX-1J-VHd"/>
                             <constraint firstItem="rSq-Ff-FIi" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="jjn-y0-HAn"/>
+                            <constraint firstAttribute="centerX" secondItem="0Z9-2E-Omx" secondAttribute="centerX" id="rBv-8J-WER"/>
                             <constraint firstItem="rSq-Ff-FIi" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="yVi-fh-9CN"/>
                         </constraints>
                     </view>
