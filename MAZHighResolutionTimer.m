@@ -97,6 +97,8 @@ static uint64_t nanos_to_abs(uint64_t nanos)
     uint64_t i = 1;
     uint64_t next_fire_date = self.abs_start_date + (time_to_wait * i);
     
+    NSLog(@"next_fire_date: %llu", next_fire_date);
+    
     while (self.running)
     {
         if (mach_absolute_time() >= next_fire_date)
@@ -106,6 +108,8 @@ static uint64_t nanos_to_abs(uint64_t nanos)
                 [self.delegate highResolutionTimerDidFire];
                 i++;
                 next_fire_date = self.abs_start_date + (time_to_wait * i);
+                uint64_t mat = mach_absolute_time();
+                NSLog(@"next_fire_date - mach_absolute_time = %llu - %llu = %llu | drift: %llu", next_fire_date, mat, next_fire_date - mat, time_to_wait - (next_fire_date - mat));
                 mach_wait_until(next_fire_date);
             }
         }

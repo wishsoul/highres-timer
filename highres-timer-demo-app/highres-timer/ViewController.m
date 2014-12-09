@@ -23,7 +23,7 @@
 {
     [super viewDidLoad];
     NSError *err;
-    _timer = [[MAZHighResolutionTimer alloc] initWithInterval:[self secondsToMilliseconds:1] delegate:self error:&err];
+    _timer = [[MAZHighResolutionTimer alloc] initWithInterval:[self secondsToMilliseconds:1.0] delegate:self error:&err];
     NSLog(@"err: %@", err);
     
     self.label.text = @"fire";
@@ -36,7 +36,7 @@
 
 - (void)highResolutionTimerDidFire
 {
-    NSLog(@"highResolutionTimerDidFire");
+//    NSLog(@"highResolutionTimerDidFire");
     dispatch_async(dispatch_get_main_queue(), ^{
         self.label.backgroundColor = (self.label.backgroundColor == [UIColor whiteColor]) ? [UIColor blackColor] : [UIColor whiteColor];
         self.label.textColor = (self.label.textColor == [UIColor blackColor]) ? [UIColor whiteColor] : [UIColor blackColor];
